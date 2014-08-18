@@ -1,0 +1,104 @@
+<?php
+
+/**
+*
+* By Tabea David
+*
+*/
+
+/**
+*
+* MobileDetect
+*
+* See README.md for usage instructions.
+*
+* @author Tabea David <info@justonestep.de>
+* @version 0.0.1
+* @copyright Copyright (c) 2014
+* @see https://github.com/justonestep/processwire-mobiledetect
+* @see http://www.processwire.com
+*
+*/
+
+/**
+* Class MobileDetect
+*/
+class MobileDetect extends WireData implements Module {
+
+  /**
+   * Retrieves module meta data
+   * Implementation of the Module interface
+   *
+   * @return array
+   * @see http://processwire.com/apigen/class-Module.html
+   */
+  public static function getModuleInfo() {
+    return array(
+      'title' => 'Mobile Detect',
+      'summary' => 'Mobile Detect uses a lightweight PHP class for detecting mobile devices (including tablets).',
+      'version' => 1,
+      'href' => 'https://github.com/justonestep/processwire-mobiledetect',
+      'singular' => true,
+      'autoload' => true,
+    );
+  }
+
+  /**
+   * Initialize the module
+   * Initialize a new web contact form
+   *
+   * Implementation of the Module interface
+   *
+   * ProcessWire calls this when the module is loaded. For 'autoload' modules, this will be called
+   * when ProcessWire's API is ready. As a result, this is a good place to attach hooks.
+   *
+   * @see http://processwire.com/apigen/class-Module.html
+   *
+   * @param Template $template Template object holding the form's fields.
+   *
+   */
+  public function init() {
+    require_once('lib/Mobile_Detect.php');
+    $this->addHookBefore('PageRender::renderPage', $this, 'mobileDetection');
+  }
+
+  /**
+   * Hook Mobile Detection
+   *
+   * @param HookEvent $event 
+   */
+  public function mobileDetection(HookEvent $event) {
+    $this->detect = new Mobile_Detect;
+    $config = $this->wire('config');
+
+    $mobileDetect = array(
+      'deviceType' => $this->getDeviceType()
+    );
+
+    foreach($this->detect->getRules() as $name => $regex) {
+      if ($this->detect->{'is'.$name}() === true) {
+
+        if (in_array($regex, $this->detect->getBrowsers())) {
+          $mobileDetect['browser'] = strtolower($name);
+        } elseif (in_array($regex, $this->detect->getOperatingSystems())) {
+          $mobileDetect['operatingsystem'] = strtolower($name);
+        } elseif (in_array($regex, $this->detect->getPhoneDevices()) || in_array($regex, $this->detect->getTabletDevices())) {
+          $mobileDetect['device'] = strtolower($name);
+        }
+
+      }
+    }
+
+    $config->mobileDetect = $mobileDetect;
+  }
+
+  /**
+   * get Device Type
+   *
+   * @param HookEvent $event 
+   */
+  private function getDeviceType() {
+    return ($this->detect->isMobile() ? ($this->detect->isTablet() ? 'tablet' : 'phone') : 'desktop');
+  }
+
+}
