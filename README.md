@@ -4,7 +4,7 @@
 
 Mobile Detect uses a lightweight PHP class [(Mobile_Detect)](https://github.com/serbanghita/Mobile-Detect) for detecting mobile devices (including tablets). 
 
-Designed for use with ProcessWire 2.4
+Designed for use with ProcessWire 2.4/2.5
 [http://processwire.com](http://processwire.com)
 
 ## Installation:
