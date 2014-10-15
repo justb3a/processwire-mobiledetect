@@ -1,28 +1,24 @@
 <?php
 
 /**
-*
-* By Tabea David
-*
-*/
+ * Mobile Detect
+ *
+ * See README.md for usage instructions.
+ *
+ * ProcessWire 2.x
+ * Licensed under GNU/GPL v2, see LICENSE.TXT
+ *
+ *
+ * @author Tabea David <td@kf-interactive.com>
+ * @version 0.0.2
+ * @copyright Copyright (c) 2014 KF Interactive, www.kf-interactive.com, <info@kf-interactive.com>
+ * @see https://github.com/justonestep/processwire-mobiledetect
+ * @see http://www.processwire.com
+ */
 
 /**
-*
-* MobileDetect
-*
-* See README.md for usage instructions.
-*
-* @author Tabea David <info@justonestep.de>
-* @version 0.0.1
-* @copyright Copyright (c) 2014
-* @see https://github.com/justonestep/processwire-mobiledetect
-* @see http://www.processwire.com
-*
-*/
-
-/**
-* Class MobileDetect
-*/
+ * Class MobileDetect
+ */
 class MobileDetect extends WireData implements Module {
 
   /**
@@ -36,7 +32,7 @@ class MobileDetect extends WireData implements Module {
     return array(
       'title' => 'Mobile Detect',
       'summary' => 'Mobile Detect uses a lightweight PHP class for detecting mobile devices (including tablets).',
-      'version' => 1,
+      'version' => 2,
       'href' => 'https://github.com/justonestep/processwire-mobiledetect',
       'singular' => true,
       'autoload' => true,
@@ -65,7 +61,7 @@ class MobileDetect extends WireData implements Module {
   /**
    * Hook Mobile Detection
    *
-   * @param HookEvent $event 
+   * @param HookEvent $event
    */
   public function mobileDetection(HookEvent $event) {
     $this->detect = new Mobile_Detect;
@@ -95,7 +91,6 @@ class MobileDetect extends WireData implements Module {
   /**
    * get Device Type
    *
-   * @param HookEvent $event 
    */
   private function getDeviceType() {
     return ($this->detect->isMobile() ? ($this->detect->isTablet() ? 'tablet' : 'phone') : 'desktop');
