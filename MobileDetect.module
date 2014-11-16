@@ -10,7 +10,7 @@
  *
  *
  * @author Tabea David <td@kf-interactive.com>
- * @version 0.0.2
+ * @version 0.0.3
  * @copyright Copyright (c) 2014 KF Interactive, www.kf-interactive.com, <info@kf-interactive.com>
  * @see https://github.com/justonestep/processwire-mobiledetect
  * @see http://www.processwire.com
@@ -32,7 +32,7 @@ class MobileDetect extends WireData implements Module {
     return array(
       'title' => 'Mobile Detect',
       'summary' => 'Mobile Detect uses a lightweight PHP class for detecting mobile devices (including tablets).',
-      'version' => 2,
+      'version' => 3,
       'href' => 'https://github.com/justonestep/processwire-mobiledetect',
       'singular' => true,
       'autoload' => true,
@@ -67,19 +67,19 @@ class MobileDetect extends WireData implements Module {
     $this->detect = new Mobile_Detect;
     $config = $this->wire('config');
 
-    $mobileDetect = array(
+    $mobileDetect = (object) array(
       'deviceType' => $this->getDeviceType()
     );
 
     foreach($this->detect->getRules() as $name => $regex) {
-      if ($this->detect->{'is'.$name}() === true) {
+      if ($this->detect->{'is' . $name}() === true) {
 
         if (in_array($regex, $this->detect->getBrowsers())) {
-          $mobileDetect['browser'] = strtolower($name);
+          $mobileDetect->browser = strtolower($name);
         } elseif (in_array($regex, $this->detect->getOperatingSystems())) {
-          $mobileDetect['operatingsystem'] = strtolower($name);
+          $mobileDetect->operatingsystem = strtolower($name);
         } elseif (in_array($regex, $this->detect->getPhoneDevices()) || in_array($regex, $this->detect->getTabletDevices())) {
-          $mobileDetect['device'] = strtolower($name);
+          $mobileDetect->device = strtolower($name);
         }
 
       }
