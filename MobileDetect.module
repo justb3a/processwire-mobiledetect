@@ -10,7 +10,7 @@
  *
  *
  * @author Tabea David <td@kf-interactive.com>
- * @version 0.0.2
+ * @version 0.0.3
  * @copyright Copyright (c) 2014 KF Interactive, www.kf-interactive.com, <info@kf-interactive.com>
  * @see https://github.com/justonestep/processwire-mobiledetect
  * @see http://www.processwire.com
@@ -32,7 +32,7 @@ class MobileDetect extends WireData implements Module {
     return array(
       'title' => 'Mobile Detect',
       'summary' => 'Mobile Detect uses a lightweight PHP class for detecting mobile devices (including tablets).',
-      'version' => 2,
+      'version' => 3,
       'href' => 'https://github.com/justonestep/processwire-mobiledetect',
       'singular' => true,
       'autoload' => true,
