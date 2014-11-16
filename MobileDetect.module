@@ -67,19 +67,19 @@ class MobileDetect extends WireData implements Module {
     $this->detect = new Mobile_Detect;
     $config = $this->wire('config');
 
-    $mobileDetect = array(
+    $mobileDetect = (object) array(
       'deviceType' => $this->getDeviceType()
     );
 
     foreach($this->detect->getRules() as $name => $regex) {
-      if ($this->detect->{'is'.$name}() === true) {
+      if ($this->detect->{'is' . $name}() === true) {
 
         if (in_array($regex, $this->detect->getBrowsers())) {
-          $mobileDetect['browser'] = strtolower($name);
+          $mobileDetect->browser = strtolower($name);
         } elseif (in_array($regex, $this->detect->getOperatingSystems())) {
-          $mobileDetect['operatingsystem'] = strtolower($name);
+          $mobileDetect->operatingsystem = strtolower($name);
         } elseif (in_array($regex, $this->detect->getPhoneDevices()) || in_array($regex, $this->detect->getTabletDevices())) {
-          $mobileDetect['device'] = strtolower($name);
+          $mobileDetect->device = strtolower($name);
         }
 
       }
