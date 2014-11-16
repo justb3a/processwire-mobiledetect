@@ -25,7 +25,7 @@ git submodule update
 
 This Module extends `$config` and sets the following parameters:
 
-```
+```php
 $config->mobileDetect = array(
   'deviceType' => 'deviceType (phone, tablet or desktop)',
   'browser' => 'mobile browser',
@@ -37,18 +37,20 @@ $config->mobileDetect = array(
 You can access them where ever you want.  
 See the example below:
 
-```
+```html
   <body class="devicetype--<?php echo $config->mobileDetect->deviceType?>">
   <body class="devicetype--{{config.mobileDetect.deviceType}}"> // twig
 ```
 
 Results in:
 
-```
+```html
 <body class="devicetype--phone"> OR
 <body class="devicetype--tablet"> OR
 <body class="devicetype--desktop">
 ```
+
+## Error handling
 
 If you get the following error message:
 
