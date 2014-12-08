@@ -54,7 +54,7 @@ class MobileDetect extends WireData implements Module {
    *
    */
   public function init() {
-    require_once('lib/Mobile_Detect.php');
+    include_once('lib/Mobile_Detect.php');
     $this->addHookBefore('PageRender::renderPage', $this, 'mobileDetection');
   }
 
