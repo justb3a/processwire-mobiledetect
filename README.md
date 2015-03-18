@@ -13,8 +13,6 @@ Designed for use with ProcessWire 2.4/2.5
 
 ```
 git clone https://github.com/justonestep/processwire-mobiledetect.git your/path/site/modules/MobileDetect
-git submodule init
-git submodule update
 ```
 
 2. Login to ProcessWire admin and click Modules. 
@@ -49,24 +47,3 @@ Results in:
 <body class="devicetype--tablet"> OR
 <body class="devicetype--desktop">
 ```
-
-## Error handling
-
-If you get the following error message:
-
-```php
-Compile Error: require_once(): Failed opening required 'lib/Mobile_Detect.php' 
-(include_path='.:/usr/local/Cellar/php55/5.5.16/lib/php')
-(line 57 of /path/to/site/modules/MobileDetect/MobileDetect.module) 
-```
-
-you forgot to initialize and update the submodule. 
-(The library is included as an git submodule so I can easily update.)  
-Just run
-
-```
-git submodule init
-git submodule update
-```
-
-and everything should work as expected.
