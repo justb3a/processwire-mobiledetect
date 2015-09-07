@@ -1,17 +1,17 @@
 [
     {
         "name": "mobiledetect/mobiledetectlib",
-        "version": "2.8.12",
-        "version_normalized": "2.8.12.0",
+        "version": "2.8.16",
+        "version_normalized": "2.8.16.0",
         "source": {
             "type": "git",
             "url": "https://github.com/serbanghita/Mobile-Detect.git",
-            "reference": "af30b5b7bd683f575b1c56f74e0e0632f5dd9fc9"
+            "reference": "9a8b6c6b259924a7c80021da8ba167766a9fd5b6"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/af30b5b7bd683f575b1c56f74e0e0632f5dd9fc9",
-            "reference": "af30b5b7bd683f575b1c56f74e0e0632f5dd9fc9",
+            "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/9a8b6c6b259924a7c80021da8ba167766a9fd5b6",
+            "reference": "9a8b6c6b259924a7c80021da8ba167766a9fd5b6",
             "shasum": ""
         },
         "require": {
@@ -22,7 +22,7 @@
             "johnkary/phpunit-speedtrap": "~1.0@dev",
             "phpunit/phpunit": "*"
         },
-        "time": "2015-03-11 10:02:22",
+        "time": "2015-08-31 13:30:54",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
