@@ -1,17 +1,19 @@
-<?php
+<?php namespace ProcessWire;
+
+require_once(wire('config')->paths->MobileDetect . 'vendor/mobiledetect/mobiledetectlib/Mobile_Detect.php');
 
 /**
  * Mobile Detect
  *
  * See README.md for usage instructions.
  *
- * ProcessWire 2.x
+ * ProcessWire 3.x
  * Licensed under GNU/GPL v2, see LICENSE.TXT
  *
  *
  * @author Tabea David <td@kf-interactive.com>
- * @version 0.0.4
- * @copyright Copyright (c) 2014 KF Interactive, www.kf-interactive.com, <info@kf-interactive.com>
+ * @version 0.0.5
+ * @copyright Copyright (c) 2017 KF Interactive, www.kf-interactive.com, <info@kf-interactive.com>
  * @see https://github.com/justonestep/processwire-mobiledetect
  * @see http://www.processwire.com
  */
@@ -32,7 +34,7 @@ class MobileDetect extends WireData implements Module {
     return array(
       'title' => 'Mobile Detect',
       'summary' => 'Mobile Detect uses a lightweight PHP class for detecting mobile devices (including tablets).',
-      'version' => 4,
+      'version' => 5,
       'href' => 'https://github.com/justonestep/processwire-mobiledetect',
       'singular' => true,
       'autoload' => true,
@@ -54,7 +56,6 @@ class MobileDetect extends WireData implements Module {
    *
    */
   public function init() {
-    include_once('vendor/mobiledetect/mobiledetectlib/Mobile_Detect.php');
     $this->addHookBefore('PageRender::renderPage', $this, 'mobileDetection');
   }
 
@@ -64,28 +65,31 @@ class MobileDetect extends WireData implements Module {
    * @param HookEvent $event
    */
   public function mobileDetection(HookEvent $event) {
-    $this->detect = new Mobile_Detect;
-    $config = $this->wire('config');
-
-    $mobileDetect = (object) array(
-      'deviceType' => $this->getDeviceType()
+    $this->detect = new \Mobile_Detect;
+    $this->config->mobileDetect = (object) array(
+      'deviceType' => $this->getDeviceType(),
+      'browser' => 'unknown',
+      'operatingsystem' => 'unknown',
+      'device' => 'unknown'
     );
 
-    foreach($this->detect->getRules() as $name => $regex) {
-      if ($this->detect->{'is' . $name}() === true) {
-
-        if (in_array($regex, $this->detect->getBrowsers())) {
-          $mobileDetect->browser = strtolower($name);
-        } elseif (in_array($regex, $this->detect->getOperatingSystems())) {
-          $mobileDetect->operatingsystem = strtolower($name);
-        } elseif (in_array($regex, $this->detect->getPhoneDevices()) || in_array($regex, $this->detect->getTabletDevices())) {
-          $mobileDetect->device = strtolower($name);
+    if ($this->config->mobileDetect->deviceType !== 'desktop') {
+      foreach ($this->detect->getRules() as $name => $regex) {
+        if ($this->detect->{'is' . $name}() === true) {
+          if (in_array($regex, $this->detect->getBrowsers())) {
+            $this->config->mobileDetect->browser = strtolower($name);
+          } elseif (in_array($regex, $this->detect->getOperatingSystems())) {
+            $this->config->mobileDetect->operatingsystem = strtolower($name);
+          } elseif (in_array($regex, $this->detect->getPhoneDevices()) || in_array($regex, $this->detect->getTabletDevices())) {
+            $this->config->mobileDetect->device = strtolower($name);
+          }
         }
-
       }
+    } else {
+      // browser, operatingsystem and device will only be detected if deviceType isn't desktop
+      // therefore get fallback data
+      $this->getDesktopData();
     }
-
-    $config->mobileDetect = $mobileDetect;
   }
 
   /**
@@ -94,6 +98,35 @@ class MobileDetect extends WireData implements Module {
    */
   private function getDeviceType() {
     return ($this->detect->isMobile() ? ($this->detect->isTablet() ? 'tablet' : 'phone') : 'desktop');
+  }
+
+  // http://www.php.net/manual/en/function.get-browser.php#101125
+  private function getDesktopData() {
+    $userAgent = $this->detect->getUserAgent();
+
+    // get the platform
+    if (preg_match('/linux/i', $userAgent)) {
+      $this->config->mobileDetect->operatingsystem = 'linux';
+    } elseif (preg_match('/macintosh|mac os x/i', $userAgent)) {
+      $this->config->mobileDetect->operatingsystem = 'mac';
+    } elseif (preg_match('/windows|win32/i', $userAgent)) {
+      $this->config->mobileDetect->operatingsystem = 'windows';
+    }
+
+    // get the name of the useragent yes seperately and for good reason
+    if (preg_match('/MSIE/i', $userAgent) && !preg_match('/Opera/i', $userAgent)) {
+      $this->config->mobileDetect->browser = 'Internet Explorer';
+    } elseif (preg_match('/Firefox/i', $userAgent)) {
+      $this->config->mobileDetect->browser = 'Mozilla Firefox';
+    } elseif (preg_match('/Chrome/i', $userAgent)) {
+      $this->config->mobileDetect->browser = 'Google Chrome';
+    } elseif (preg_match('/Safari/i', $userAgent)) {
+      $this->config->mobileDetect->browser = 'Apple Safari';
+    } elseif (preg_match('/Opera/i', $userAgent)) {
+      $this->config->mobileDetect->browser = 'Opera';
+    } elseif (preg_match('/Netscape/i', $userAgent)) {
+      $this->config->mobileDetect->browser = 'Netscape';
+    }
   }
 
 }
